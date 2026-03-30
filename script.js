@@ -25,7 +25,7 @@ const roads = [
     },
   },
   {
-    image: "assets/image/roads/roundabout.jpg",
+    image: "assets/image/roads/roundabout.png",
     map: {
       trucks: [{ x: 200, y: 150 }],
       cones: [{ x: 300, y: 200 }],
@@ -48,7 +48,7 @@ window.addEventListener("load", () => {
   const road = getRoad(roads);
   console.log(mainWindow);
 
-  mainWindow.innerHTML += `<img src='${road.image}' alt='road image'/>`;
+  mainWindow.innerHTML += `<img class='road' src='${road.image}' alt='road image'/>`;
   const trucks = document.querySelectorAll(".trucks");
 
   trucks.forEach((truck) => {
@@ -119,6 +119,7 @@ window.addEventListener("load", () => {
   });
 
   let placingCone = false;
+  let placingSign = false;
 
   document.getElementById("addCone").addEventListener("click", () => {
     placingCone = true;
@@ -127,11 +128,16 @@ window.addEventListener("load", () => {
     mainWindow.style.cursor = "crosshair";
   });
 
-  mainWindow.addEventListener("click", (e) => {
-    if (!placingCone) return;
+  document.getElementById("addTriangle").addEventListener("click", () => {
+    placingSign = true;
 
+    // Change cursor
+    mainWindow.style.cursor = "crosshair";
+  });
+
+  const placeElement = (e, srcString) => {
     const cone = document.createElement("img");
-    cone.src = "assets/image/icon/traffic-cone.png";
+    cone.src = srcString;
 
     cone.style.position = "absolute";
     cone.style.left = `${e.x - 15}px`;
@@ -140,14 +146,24 @@ window.addEventListener("load", () => {
     cone.style.height = "auto";
 
     body.appendChild(cone);
+  };
 
-    mainWindow.style.cursor = "default";
+  mainWindow.addEventListener("click", (e) => {
+    if (placingCone) {
+      placeElement(e, "assets/image/icon/traffic-cone.png");
+    } else if (placingSign) {
+      placeElement(e, "assets/image/icon/warning.png");
+    }
   });
 
   mainWindow.addEventListener("contextmenu", (e) => {
     if (placingCone) {
       e.preventDefault();
       placingCone = false;
+      mainWindow.style.cursor = "default";
+    } else if (placingSign) {
+      e.preventDefault();
+      placingSign = false;
       mainWindow.style.cursor = "default";
     }
   });

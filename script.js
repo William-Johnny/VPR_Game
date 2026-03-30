@@ -17,7 +17,7 @@ const roads = [
     },
   },
   {
-    image: "assets/image/roads/highway.jpg",
+    image: "assets/image/roads/highway.png",
     map: {
       trucks: [{ x: 200, y: 150 }],
       cones: [{ x: 300, y: 200 }],

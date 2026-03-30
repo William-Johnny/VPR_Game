@@ -97,3 +97,46 @@ button {
 .road {
   object-fit: contain;
 }
+
+.distance-arrow {
+  position: absolute;
+  width: 100px;
+  height: 20px;
+  transform: translate(-50%, -50%);
+  cursor: move;
+}
+
+/* center line */
+.distance-arrow::before {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 5px;
+  right: 5px;
+  height: 2px;
+  background: blue;
+  transform: translateY(-50%);
+}
+
+/* left arrow head */
+.distance-arrow::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 50%;
+  border-top: 5px solid transparent;
+  border-bottom: 5px solid transparent;
+  border-right: 8px solid blue;
+  transform: translateY(-50%);
+}
+
+/* right arrow head */
+.distance-arrow span {
+  position: absolute;
+  right: 0;
+  top: 50%;
+  border-top: 5px solid transparent;
+  border-bottom: 5px solid transparent;
+  border-left: 8px solid blue;
+  transform: translateY(-50%);
+}

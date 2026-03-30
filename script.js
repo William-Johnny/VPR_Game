@@ -46,7 +46,8 @@ window.addEventListener("load", () => {
   const mainWindow = document.getElementById("mainWindow");
   const body = document.querySelector("body");
   const road = getRoad(roads);
-  console.log(mainWindow);
+  let placingDistance = false;
+  let pointA = null;
 
   mainWindow.innerHTML += `<img class='road' src='${road.image}' alt='road image'/>`;
   const trucks = document.querySelectorAll(".trucks");
@@ -123,15 +124,17 @@ window.addEventListener("load", () => {
 
   document.getElementById("addCone").addEventListener("click", () => {
     placingCone = true;
-
-    // Change cursor
     mainWindow.style.cursor = "crosshair";
   });
 
   document.getElementById("addTriangle").addEventListener("click", () => {
     placingSign = true;
+    mainWindow.style.cursor = "crosshair";
+  });
 
-    // Change cursor
+  document.getElementById("addDist").addEventListener("click", () => {
+    placingDistance = true;
+    pointA = null;
     mainWindow.style.cursor = "crosshair";
   });
 
@@ -148,11 +151,86 @@ window.addEventListener("load", () => {
     body.appendChild(cone);
   };
 
+  function createArrow(p1, p2) {
+    const dx = p2.x - p1.x;
+    const dy = p2.y - p1.y;
+    const length = Math.sqrt(dx * dx + dy * dy);
+    const angle = Math.atan2(dy, dx) * (180 / Math.PI);
+
+    // Line
+    const line = document.createElement("div");
+    line.style.position = "absolute";
+    line.style.left = `${p1.x}px`;
+    line.style.top = `${p1.y}px`;
+    line.style.width = `${length}px`;
+    line.style.height = "2px";
+    line.style.background = "black";
+    line.style.transformOrigin = "0 0";
+    line.style.transform = `rotate(${angle}deg)`;
+
+    body.appendChild(line);
+
+    // Arrow head
+    const arrow = document.createElement("div");
+    arrow.style.position = "absolute";
+    arrow.style.left = `${p2.x}px`;
+    arrow.style.top = `${p2.y}px`;
+    arrow.style.width = "0";
+    arrow.style.height = "0";
+    arrow.style.border = "5px solid black";
+    arrow.style.transform = `translate(-50%, -50%)`;
+
+    body.appendChild(arrow);
+
+    // Input field (middle of line)
+    const input = document.createElement("input");
+    input.type = "text";
+    input.placeholder = "distance";
+
+    input.style.position = "absolute";
+    input.style.left = `${(p1.x + p2.x) / 2}px`;
+    input.style.top = `${(p1.y + p2.y) / 2}px`;
+    input.style.transform = "translate(-50%, -50%)";
+    input.style.width = "60px";
+    input.style.backgroundColor = "white";
+    input.style.textAlign = "center";
+
+    body.appendChild(input);
+  }
+
   mainWindow.addEventListener("click", (e) => {
     if (placingCone) {
       placeElement(e, "assets/image/icon/traffic-cone.png");
     } else if (placingSign) {
       placeElement(e, "assets/image/icon/warning.png");
+    } else if (placingDistance) {
+      const x = e.x;
+      const y = e.y;
+
+      const firtArrowHead = document.createElement("div");
+      firtArrowHead.style.position = "absolute";
+      firtArrowHead.style.left = `${x}px`;
+      firtArrowHead.style.top = `${y}px`;
+      firtArrowHead.style.width = "0";
+      firtArrowHead.style.height = "0";
+      firtArrowHead.style.border = "5px solid black";
+      firtArrowHead.style.transform = `translate(-50%, -50%)`;
+
+      body.appendChild(firtArrowHead);
+
+      // First click → store point A
+      if (!pointA) {
+        pointA = { x, y };
+        return;
+      }
+
+      // Second click → create arrow
+      createArrow(pointA, { x, y });
+
+      // Reset
+      placingDistance = false;
+      pointA = null;
+      mainWindow.style.cursor = "default";
     }
   });
 

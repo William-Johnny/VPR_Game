@@ -93,6 +93,28 @@ window.addEventListener("load", () => {
     tag.style.left = `${e.x - 30}px`;
     tag.style.top = `${e.y - 30}px`;
 
+    switch (name) {
+      case "VSAV":
+        tag.style.backgroundColor = "green";
+        break;
+
+      case "VLU":
+        tag.style.backgroundColor = "blue";
+        break;
+
+      case "VSR":
+        tag.style.backgroundColor = "black";
+        break;
+
+      case "VPR":
+        tag.style.backgroundColor = "red";
+        break;
+
+      default:
+        tag.style.backgroundColor = "black";
+        break;
+    }
+
     body.appendChild(tag);
   });
 
@@ -119,8 +141,6 @@ window.addEventListener("load", () => {
 
     body.appendChild(cone);
 
-    // Exit placement mode
-    placingCone = false;
     mainWindow.style.cursor = "default";
   });
 

@@ -99,7 +99,7 @@ window.addEventListener("load", () => {
         tag.style.backgroundColor = "green";
         break;
 
-      case "VLU":
+      case "VLCDG":
         tag.style.backgroundColor = "blue";
         break;
 

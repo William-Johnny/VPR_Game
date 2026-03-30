@@ -246,6 +246,44 @@ window.addEventListener("load", () => {
     }
   });
 
+  function showPopup() {
+    const popup = document.getElementById("timeUpPopup");
+    popup.style.opacity = 1;
+    popup.style.pointerEvents = "all";
+  }
+
+  let duration = 60; // seconds
+  let timerInterval;
+
+  function startTimer(seconds) {
+    duration = seconds;
+    updateDisplay();
+
+    timerInterval = setInterval(() => {
+      duration--;
+
+      updateDisplay();
+
+      if (duration <= 0) {
+        clearInterval(timerInterval);
+        showPopup();
+      }
+    }, 1000);
+  }
+
+  function updateDisplay() {
+    const minutes = Math.floor(duration / 60);
+    const seconds = duration % 60;
+
+    const formatted =
+      `${minutes.toString().padStart(2, "0")}:` +
+      `${seconds.toString().padStart(2, "0")}`;
+
+    document.getElementById("timer").textContent = formatted;
+  }
+
+  startTimer(90);
+
   function isClose(pos1, pos2, tolerance = 50) {
     return (
       Math.abs(pos1.x - pos2.x) < tolerance &&

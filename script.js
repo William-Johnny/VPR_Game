@@ -124,16 +124,22 @@ window.addEventListener("load", () => {
 
   document.getElementById("addCone").addEventListener("click", () => {
     placingCone = true;
+    placingSign = false;
+    placingDistance = false;
     mainWindow.style.cursor = "crosshair";
   });
 
   document.getElementById("addTriangle").addEventListener("click", () => {
     placingSign = true;
+    placingCone = false;
+    placingDistance = false;
     mainWindow.style.cursor = "crosshair";
   });
 
   document.getElementById("addDist").addEventListener("click", () => {
     placingDistance = true;
+    placingSign = false;
+    placingCone = false;
     pointA = null;
     mainWindow.style.cursor = "crosshair";
   });

@@ -192,3 +192,20 @@ button {
   height: 400px;
   width: 400px;
 }
+
+#contextMenu {
+  position: absolute;
+  display: none;
+  background: black;
+  border: 1px solid red;
+  padding: 5px;
+  z-index: 1000;
+}
+
+#contextMenu button {
+  background: red;
+  color: white;
+  border: none;
+  padding: 5px 10px;
+  cursor: pointer;
+}

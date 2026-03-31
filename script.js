@@ -52,6 +52,16 @@ window.addEventListener("load", () => {
   mainWindow.innerHTML += `<img class='road' src='${road.image}' alt='road image'/>`;
   const trucks = document.querySelectorAll(".trucks");
 
+  const displayContextMenu = (e) => {
+    selectedElement = e.target;
+
+    const menu = document.getElementById("contextMenu");
+
+    menu.style.left = `${e.pageX}px`;
+    menu.style.top = `${e.pageY}px`;
+    menu.style.display = "block";
+  };
+
   trucks.forEach((truck) => {
     truck.addEventListener("dragstart", (e) => {
       const name = truck.dataset.name;
@@ -91,6 +101,7 @@ window.addEventListener("load", () => {
     tag.classList.add("tag");
     tag.textContent = name;
 
+    tag.style.position = "absolute";
     tag.style.left = `${e.x - 30}px`;
     tag.style.top = `${e.y - 30}px`;
 
@@ -115,6 +126,11 @@ window.addEventListener("load", () => {
         tag.style.backgroundColor = "black";
         break;
     }
+
+    // tag.addEventListener("click", (e) => {
+    //   e.stopPropagation();
+    //   displayContextMenu(e);
+    // });
 
     body.appendChild(tag);
   });
@@ -153,6 +169,10 @@ window.addEventListener("load", () => {
     cone.style.top = `${e.y - 15}px`;
     cone.style.width = "30px";
     cone.style.height = "auto";
+
+    cone.addEventListener("click", (e) => {
+      displayContextMenu(e);
+    });
 
     body.appendChild(cone);
   };
@@ -205,6 +225,8 @@ window.addEventListener("load", () => {
   }
 
   mainWindow.addEventListener("click", (e) => {
+    //if (e.target !== mainWindow) return;
+
     if (placingCone) {
       placeElement(e, "assets/image/icon/traffic-cone.png");
     } else if (placingSign) {
@@ -237,6 +259,11 @@ window.addEventListener("load", () => {
       placingDistance = false;
       pointA = null;
       mainWindow.style.cursor = "default";
+    }
+    const menu = document.getElementById("contextMenu");
+
+    if (!menu.contains(e.target)) {
+      menu.style.display = "none";
     }
   });
 
@@ -289,6 +316,18 @@ window.addEventListener("load", () => {
   }
 
   startTimer(90);
+
+  let selectedElement = null;
+  const test = document.querySelector(".tag");
+
+  document.getElementById("deleteBtn").addEventListener("click", () => {
+    if (selectedElement) {
+      selectedElement.remove();
+      selectedElement = null;
+    }
+
+    document.getElementById("contextMenu").style.display = "none";
+  });
 
   function isClose(pos1, pos2, tolerance = 50) {
     return (

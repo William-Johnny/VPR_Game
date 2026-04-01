@@ -7,37 +7,81 @@ getRoad = (roads) => {
   return roads[randomInt];
 };
 
+function isClose(pos1, pos2, tolerance = 50) {
+  return (
+    Math.abs(pos1.x - pos2.x) < tolerance &&
+    Math.abs(pos1.y - pos2.y) < tolerance
+  );
+}
+
 const roads = [
   {
     image: "assets/image/roads/straight.jpg",
     map: {
-      trucks: [{ x: 200, y: 150 }],
-      cones: [{ x: 300, y: 200 }],
-      triangles: [{ x: 100, y: 100 }],
+      trucks: [
+        {
+          VLCDG: { x: 538, y: 128 },
+          VSAV: { x: 538, y: 250 },
+          VSR: { x: 536, y: 576 },
+          VPR: { x: 537, y: 708 },
+        },
+      ],
+      cones: [{ x: 501, y: 676 }],
+      triangles: [
+        { x: 587, y: 856 },
+        { x: 408, y: 20 },
+      ],
     },
   },
   {
     image: "assets/image/roads/highway.png",
     map: {
-      trucks: [{ x: 200, y: 150 }],
-      cones: [{ x: 300, y: 200 }],
-      triangles: [{ x: 100, y: 100 }],
+      trucks: [
+        {
+          VLCDG: { x: 725, y: 200 },
+          VSAV: { x: 725, y: 300 },
+          VSR: { x: 725, y: 515 },
+          VPR: { x: 725, y: 650 },
+        },
+      ],
+      cones: [{ x: 700, y: 600 }],
+      triangles: [{ x: 765, y: 800 }],
     },
   },
   {
     image: "assets/image/roads/roundabout.png",
     map: {
-      trucks: [{ x: 200, y: 150 }],
-      cones: [{ x: 300, y: 200 }],
-      triangles: [{ x: 100, y: 100 }],
+      trucks: [
+        {
+          VLCDG: { x: 555, y: 663 },
+          VSAV: { x: 553, y: 624 },
+          VSR: { x: 410, y: 487 },
+          VPR: { x: 530, y: 315 },
+        },
+      ],
+      cones: [{ x: 317, y: 467 }],
+      triangles: [
+        { x: 169, y: 512 },
+        { x: 728, y: 713 },
+      ],
     },
   },
   {
     image: "assets/image/roads/turn.jpg",
     map: {
-      trucks: [{ x: 200, y: 150 }],
-      cones: [{ x: 300, y: 200 }],
-      triangles: [{ x: 100, y: 100 }],
+      trucks: [
+        {
+          VLCDG: { x: 846, y: 468 },
+          VSAV: { x: 843, y: 379 },
+          VSR: { x: 712, y: 168 },
+          VPR: { x: 350, y: 375 },
+        },
+      ],
+      cones: [{ x: 325, y: 353 }],
+      triangles: [
+        { x: 450, y: 829 },
+        { x: 1010, y: 524 },
+      ],
     },
   },
 ];
@@ -50,6 +94,13 @@ window.addEventListener("load", () => {
   let pointA = null;
 
   mainWindow.innerHTML += `<img class='road' src='${road.image}' alt='road image'/>`;
+  const overlay = document.createElement("div");
+  overlay.id = "mapOverlay";
+  mainWindow.appendChild(overlay);
+
+  // display points
+  displayMapPoints(road);
+
   const trucks = document.querySelectorAll(".trucks");
 
   const displayContextMenu = (e) => {
@@ -104,6 +155,22 @@ window.addEventListener("load", () => {
     tag.style.position = "absolute";
     tag.style.left = `${e.x - 30}px`;
     tag.style.top = `${e.y - 30}px`;
+
+    console.log(
+      `truck => x: ${Math.round(e.x - 30)}, y: ${Math.round(e.y - 30)}`,
+    );
+
+    const correctPlacement = road.map.trucks[0][name];
+
+    const placed = { x: e.x - 30, y: e.y - 30 };
+
+    console.log(correctPlacement);
+
+    if (isClose(placed, correctPlacement)) {
+      console.log("Correct placement ✅");
+    } else {
+      console.log("Wrong placement ❌");
+    }
 
     switch (name) {
       case "VSAV":
@@ -160,7 +227,7 @@ window.addEventListener("load", () => {
     mainWindow.style.cursor = "crosshair";
   });
 
-  const placeElement = (e, srcString) => {
+  const placeElement = (e, srcString, name) => {
     const cone = document.createElement("img");
     cone.src = srcString;
 
@@ -169,6 +236,7 @@ window.addEventListener("load", () => {
     cone.style.top = `${e.y - 15}px`;
     cone.style.width = "30px";
     cone.style.height = "auto";
+    cone.className = name;
 
     cone.addEventListener("click", (e) => {
       displayContextMenu(e);
@@ -228,9 +296,35 @@ window.addEventListener("load", () => {
     //if (e.target !== mainWindow) return;
 
     if (placingCone) {
-      placeElement(e, "assets/image/icon/traffic-cone.png");
+      const correctPlacement = road.map.cones[0];
+
+      const placed = { x: e.x, y: e.y };
+
+      console.log(`x: ${e.x}, y: ${e.y}`);
+
+      if (isClose(placed, correctPlacement)) {
+        console.log("Correct placement ✅");
+      } else {
+        console.log("Wrong placement ❌");
+      }
+      placeElement(e, "assets/image/icon/traffic-cone.png", "cone");
     } else if (placingSign) {
-      placeElement(e, "assets/image/icon/warning.png");
+      const firstCorrectPlacement = road.map.triangles[0];
+      const secondCorrectPlacement = road.map.triangles[1];
+
+      const placed = { x: e.x, y: e.y };
+
+      console.log(`x: ${e.x}, y: ${e.y}`);
+
+      if (
+        isClose(placed, firstCorrectPlacement) ||
+        isClose(placed, secondCorrectPlacement)
+      ) {
+        console.log("Correct placement ✅");
+      } else {
+        console.log("Wrong placement ❌");
+      }
+      placeElement(e, "assets/image/icon/warning.png", "triangle");
     } else if (placingDistance) {
       const x = e.x;
       const y = e.y;
@@ -315,7 +409,7 @@ window.addEventListener("load", () => {
     document.getElementById("timer").textContent = formatted;
   }
 
-  startTimer(90);
+  startTimer(100000);
 
   let selectedElement = null;
   const test = document.querySelector(".tag");
@@ -329,19 +423,62 @@ window.addEventListener("load", () => {
     document.getElementById("contextMenu").style.display = "none";
   });
 
-  function isClose(pos1, pos2, tolerance = 50) {
-    return (
-      Math.abs(pos1.x - pos2.x) < tolerance &&
-      Math.abs(pos1.y - pos2.y) < tolerance
-    );
+  function createPoint(pos, color) {
+    const div = document.createElement("div");
+    div.classList.add("map-point");
+
+    div.style.left = `${pos.x}px`;
+    div.style.top = `${pos.y}px`;
+    div.style.backgroundColor = color;
+
+    return div;
   }
 
-  // const correct = road.map.trucks[0];
-  // const placed = { x: element.offsetLeft, y: element.offsetTop };
+  function displayMapPoints(road) {
+    const overlay = document.getElementById("mapOverlay");
+    overlay.innerHTML = ""; // reset
 
-  // if (isClose(placed, correct)) {
-  //   console.log("Correct placement ✅");
-  // } else {
-  //   console.log("Wrong placement ❌");
-  // }
+    // // Trucks (blue)
+    // road.map.trucks.forEach((p) => {
+    //   const point = createPoint(p, "blue");
+    //   overlay.appendChild(point);
+    // });
+
+    // Cones (orange)
+    road.map.cones.forEach((p) => {
+      const point = createPoint(p, "orange");
+      overlay.appendChild(point);
+    });
+
+    // Triangles (yellow)
+    road.map.triangles.forEach((p) => {
+      const point = createPoint(p, "yellow");
+      overlay.appendChild(point);
+    });
+  }
+
+  let isDragging = false;
+
+  debugPoint.addEventListener("mousedown", (e) => {
+    isDragging = true;
+    debugPoint.style.cursor = "grabbing";
+    e.stopPropagation();
+  });
+
+  document.addEventListener("mousemove", (e) => {
+    if (!isDragging) return;
+
+    const x = e.x;
+    const y = e.y;
+
+    debugPoint.style.left = `${x}px`;
+    debugPoint.style.top = `${y}px`;
+
+    console.log(`x: ${Math.round(x)}, y: ${Math.round(y)}`);
+  });
+
+  document.addEventListener("mouseup", () => {
+    isDragging = false;
+    debugPoint.style.cursor = "grab";
+  });
 });

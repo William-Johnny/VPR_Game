@@ -199,10 +199,10 @@ window.addEventListener("load", () => {
         break;
     }
 
-    // tag.addEventListener("click", (e) => {
-    //   e.stopPropagation();
-    //   displayContextMenu(e);
-    // });
+    tag.addEventListener("click", (e) => {
+      e.stopPropagation();
+      displayContextMenu(e);
+    });
 
     mainWindow.appendChild(tag);
   });
@@ -481,29 +481,4 @@ window.addEventListener("load", () => {
       overlay.appendChild(point);
     });
   }
-
-  let isDragging = false;
-
-  debugPoint.addEventListener("mousedown", (e) => {
-    isDragging = true;
-    debugPoint.style.cursor = "grabbing";
-    e.stopPropagation();
-  });
-
-  document.addEventListener("mousemove", (e) => {
-    if (!isDragging) return;
-
-    const x = e.x;
-    const y = e.y;
-
-    debugPoint.style.left = `${x}px`;
-    debugPoint.style.top = `${y}px`;
-
-    console.log(`x: ${Math.round(x)}, y: ${Math.round(y)}`);
-  });
-
-  document.addEventListener("mouseup", () => {
-    isDragging = false;
-    debugPoint.style.cursor = "grab";
-  });
 });

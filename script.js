@@ -77,7 +77,7 @@ const roads = [
           VPR: { x: 350, y: 375 },
         },
       ],
-      cones: [{ x: 325, y: 353 }],
+      cones: [{ x: 489, y: 355 }],
       triangles: [
         { x: 550, y: 860 },
         { x: 1115, y: 500 },

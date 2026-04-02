@@ -97,8 +97,8 @@ window.addEventListener("load", () => {
   const overlay = document.createElement("div");
 
   // display points
-  displayMapPoints(road);
-  displayTruckDebugPoints(road);
+  // displayMapPoints(road);
+  // displayTruckDebugPoints(road);
 
   const trucks = document.querySelectorAll(".trucks");
 

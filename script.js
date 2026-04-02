@@ -95,11 +95,10 @@ window.addEventListener("load", () => {
 
   mainWindow.innerHTML += `<img class='road' src='${road.image}' alt='road image'/>`;
   const overlay = document.createElement("div");
-  overlay.id = "mapOverlay";
-  mainWindow.appendChild(overlay);
 
   // display points
   displayMapPoints(road);
+  displayTruckDebugPoints(road);
 
   const trucks = document.querySelectorAll(".trucks");
 
@@ -152,17 +151,23 @@ window.addEventListener("load", () => {
     tag.classList.add("tag");
     tag.textContent = name;
 
-    tag.style.position = "absolute";
-    tag.style.left = `${e.x - 30}px`;
-    tag.style.top = `${e.y - 30}px`;
+    const rect = mainWindow.getBoundingClientRect();
 
-    console.log(
-      `truck => x: ${Math.round(e.x - 30)}, y: ${Math.round(e.y - 30)}`,
-    );
+    console.log(rect.left);
+
+    const x = e.clientX - rect.left + 160;
+    const y = e.clientY - rect.top;
+
+    tag.style.position = "absolute";
+    tag.style.left = `${x - 30}px`;
+    tag.style.top = `${y - 30}px`;
+    console.log(e.target);
+
+    console.log(`truck => x: ${Math.round(x)}, y: ${Math.round(y - 30)}`);
 
     const correctPlacement = road.map.trucks[0][name];
 
-    const placed = { x: e.x - 30, y: e.y - 30 };
+    const placed = { x: x - 30, y: y - 30 };
 
     console.log(correctPlacement);
 
@@ -199,7 +204,7 @@ window.addEventListener("load", () => {
     //   displayContextMenu(e);
     // });
 
-    body.appendChild(tag);
+    mainWindow.appendChild(tag);
   });
 
   let placingCone = false;
@@ -434,10 +439,30 @@ window.addEventListener("load", () => {
     return div;
   }
 
-  function displayMapPoints(road) {
-    const overlay = document.getElementById("mapOverlay");
-    overlay.innerHTML = ""; // reset
+  function createDebugPoint(x, y, name) {
+    const point = document.createElement("div");
+    point.classList.add("debug-point");
 
+    point.style.position = "absolute";
+    point.style.left = `${x}px`;
+    point.style.top = `${y}px`;
+    point.style.transform = "translate(-50%, -50%)";
+
+    point.textContent = name;
+
+    return point;
+  }
+
+  function displayTruckDebugPoints(road) {
+    const trucks = road.map.trucks[0]; // your structure
+
+    Object.entries(trucks).forEach(([name, pos]) => {
+      const point = createDebugPoint(pos.x, pos.y, name);
+      mainWindow.appendChild(point);
+    });
+  }
+
+  function displayMapPoints(road) {
     // // Trucks (blue)
     // road.map.trucks.forEach((p) => {
     //   const point = createPoint(p, "blue");

@@ -428,57 +428,57 @@ window.addEventListener("load", () => {
     document.getElementById("contextMenu").style.display = "none";
   });
 
-  function createPoint(pos, color) {
-    const div = document.createElement("div");
-    div.classList.add("map-point");
+  // function createPoint(pos, color) {
+  //   const div = document.createElement("div");
+  //   div.classList.add("map-point");
 
-    div.style.left = `${pos.x}px`;
-    div.style.top = `${pos.y}px`;
-    div.style.backgroundColor = color;
+  //   div.style.left = `${pos.x}px`;
+  //   div.style.top = `${pos.y}px`;
+  //   div.style.backgroundColor = color;
 
-    return div;
-  }
+  //   return div;
+  // }
 
-  function createDebugPoint(x, y, name) {
-    const point = document.createElement("div");
-    point.classList.add("debug-point");
+  // function createDebugPoint(x, y, name) {
+  //   const point = document.createElement("div");
+  //   point.classList.add("debug-point");
 
-    point.style.position = "absolute";
-    point.style.left = `${x}px`;
-    point.style.top = `${y}px`;
-    point.style.transform = "translate(-50%, -50%)";
+  //   point.style.position = "absolute";
+  //   point.style.left = `${x}px`;
+  //   point.style.top = `${y}px`;
+  //   point.style.transform = "translate(-50%, -50%)";
 
-    point.textContent = name;
+  //   point.textContent = name;
 
-    return point;
-  }
+  //   return point;
+  // }
 
-  function displayTruckDebugPoints(road) {
-    const trucks = road.map.trucks[0]; // your structure
+  // function displayTruckDebugPoints(road) {
+  //   const trucks = road.map.trucks[0]; // your structure
 
-    Object.entries(trucks).forEach(([name, pos]) => {
-      const point = createDebugPoint(pos.x, pos.y, name);
-      mainWindow.appendChild(point);
-    });
-  }
+  //   Object.entries(trucks).forEach(([name, pos]) => {
+  //     const point = createDebugPoint(pos.x, pos.y, name);
+  //     mainWindow.appendChild(point);
+  //   });
+  // }
 
-  function displayMapPoints(road) {
-    // // Trucks (blue)
-    // road.map.trucks.forEach((p) => {
-    //   const point = createPoint(p, "blue");
-    //   overlay.appendChild(point);
-    // });
+  // function displayMapPoints(road) {
+  //   // // Trucks (blue)
+  //   // road.map.trucks.forEach((p) => {
+  //   //   const point = createPoint(p, "blue");
+  //   //   overlay.appendChild(point);
+  //   // });
 
-    // Cones (orange)
-    road.map.cones.forEach((p) => {
-      const point = createPoint(p, "orange");
-      overlay.appendChild(point);
-    });
+  //   // Cones (orange)
+  //   road.map.cones.forEach((p) => {
+  //     const point = createPoint(p, "orange");
+  //     overlay.appendChild(point);
+  //   });
 
-    // Triangles (yellow)
-    road.map.triangles.forEach((p) => {
-      const point = createPoint(p, "yellow");
-      overlay.appendChild(point);
-    });
-  }
+  //   // Triangles (yellow)
+  //   road.map.triangles.forEach((p) => {
+  //     const point = createPoint(p, "yellow");
+  //     overlay.appendChild(point);
+  //   });
+  // }
 });
